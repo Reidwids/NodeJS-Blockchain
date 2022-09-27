@@ -1,37 +1,33 @@
-import { Block, Transaction } from "../models/types";
+import {Request, Response} from 'express';
+import {Blockchain} from '../models/Blockchain';
+import {v4 as uuidv4} from 'uuid';
 
-var express = require("express");
+var express = require('express');
 var router = express.Router();
+const blockchain = new Blockchain();
+let node_address = uuidv4().toString().replace('-', '');
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-	res.render("index", { title: "Express" });
+router.get('/', function (req: Request, res: Response) {
+  res.render('index', {title: 'Express'});
 });
 
-class Blockchain {
-	chain: Block[];
-	transactions: Transaction[];
-	nodes: Set<string>;
-
-	constructor() {
-		this.chain = [];
-		this.transactions = [];
-		this.createBlock(1, "0");
-		this.nodes = new Set<string>();
-	}
-
-	createBlock(this, proof: number, previous_hash: string): Block {
-		const block = {
-			index: this.chain.length + 1,
-			timestamp: Date.now().toString(),
-			proof: proof,
-			previous_hash: previous_hash,
-			transactions: this.transactions,
-		};
-		this.transactions = [];
-		this.chain.push(block);
-		return block;
-	}
-}
+router.get('/mineBlock', function (req: Request, res: Response) {
+  let previousBlock = blockchain.getPreviousBlock();
+  let previousProof = previousBlock.proof;
+  let proof = blockchain.proofOfWork(previousProof);
+  let previousHash = blockchain.hash(previousBlock);
+  blockchain.addTransaction(node_address, 'Derek', '1');
+  let block = blockchain.createBlock(proof, previousHash);
+  let response = {
+    message: 'Block mined!!!!!!',
+    index: block['index'],
+    'time stamp': block['timestamp'],
+    proof: block['proof'],
+    previous_hash: block.previousHash,
+    transactions: block.transactions,
+  };
+  res.send(JSON.stringify(response));
+});
 
 module.exports = router;

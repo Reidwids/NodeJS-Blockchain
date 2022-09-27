@@ -1,12 +1,12 @@
-export class Block {
+export interface Block {
 	index: number;
 	timestamp: string;
 	proof: number;
-	previous_hash: string;
+	previousHash: string;
 	transactions: Transaction[];
 }
 
-export class Transaction {
+export interface Transaction {
 	sender: string;
 	receiver: string;
 	amount: string;
