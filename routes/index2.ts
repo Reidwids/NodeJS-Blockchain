@@ -18,7 +18,7 @@ router.get('/mineBlock', function (req: Request, res: Response) {
   let previousProof = previousBlock.proof;
   let proof = blockchain.proofOfWork(previousProof);
   let previousHash = blockchain.hash(previousBlock);
-  blockchain.addTransaction(node_address, 'OG chain', '0');
+  blockchain.addTransaction(node_address, 'chain 2', '2');
   let block = blockchain.createBlock(proof, previousHash);
   let response = {
     message: 'Block mined!!!!!!',
