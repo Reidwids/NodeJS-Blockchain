@@ -62,7 +62,8 @@ var Blockchain = /** @class */ (function () {
         return block;
     };
     Blockchain.prototype.getPreviousBlock = function () {
-        return this.chain[-1];
+        console.log('CHAIN: ', this.chain);
+        return this.chain[this.chain.length - 1];
     };
     Blockchain.prototype.proofOfWork = function (previousProof) {
         var newProof = 1;
